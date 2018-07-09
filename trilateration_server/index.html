@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+
+<head>
+    <title>ROOM MAP</title>
+    <style>
+        .chart {}
+
+        .main text {
+            font: 10px sans-serif;
+        }
+
+        .axis line,
+        .axis path {
+            shape-rendering: crispEdges;
+            stroke: black;
+            fill: none;
+        }
+    </style>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.v2.js"></script>
+    <script src='/socket.io/socket.io.js'></script>
+</head>
+
+<body>
+    <div class='content'>
+        <!-- /the chart goes here -->
+    </div>
+
+    <!-- D3 CODE FOR CHART GENERATION -->
+    <script type="text/javascript">
+        
+		var beacon = [[0, 9.69], [6.47, 4.65], [2, 1]];
+		//SECOND SETTING var beacon = [[0, 7.9], [3.97, 9.85], [6.47, 7.9]];
+		
+
+        var margin = { top: 60, right: 60, bottom: 60, left: 60 }
+            , width = 800 - margin.left - margin.right
+            , height = 800 - margin.top - margin.bottom;
+
+        var x = d3.scale.linear()
+            .domain([0, 6.47])
+            .range([0, width]);
+
+        var y = d3.scale.linear()
+            .domain([0, 10.65])
+            .range([height, 0]);
+
+        var chart = d3.select('body')
+            .append('svg:svg')
+            .attr('width', width + margin.right + margin.left)
+            .attr('height', height + margin.top + margin.bottom)
+            .attr('class', 'chart')
+
+        var main = chart.append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+            .attr('width', width)
+            .attr('height', height)
+            .attr('class', 'main')
+
+        // draw the x axis
+        var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient('bottom');
+        // draw the x axis
+        var xAxis2 = d3.svg.axis()
+            .scale(x)
+            .orient('bottom');
+
+        main.append('g')
+            .attr('transform', 'translate(0,' + height + ')')
+            .attr('class', 'main axis date')
+            .call(xAxis);
+
+        main.append('g')
+            .attr('transform', 'translate(0,0)')
+            .attr('class', 'main axis date')
+            .call(xAxis2);
+
+        // draw the y axis
+        var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient('left');
+
+        var yAxis2 = d3.svg.axis()
+            .scale(y)
+            .orient('right');
+
+        main.append('g')
+            .attr('transform', 'translate(0,0)')
+            .attr('class', 'main axis date')
+            .call(yAxis);
+
+        main.append('g')
+            .attr('transform', "translate(" + width + " ,0)")
+            .attr('class', 'main axis date')
+            .call(yAxis2);
+
+        var g = main.append("svg:g");
+
+        // plot beacon
+        g.selectAll("scatter-dots")
+            .data(beacon)
+            .enter().append("svg:circle")
+            .attr("cx", function (d, i) { return x(d[0]); })
+            .attr("cy", function (d) { return y(d[1]); })
+            .attr("r", 7)
+            .attr("fill", "red");
+
+        // CHART UPDATE USING SOCKET
+        // message format: [[x,y,id]]
+        var socket = io();
+
+        function colors(n) {
+            var colors_g = ["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e", "#316395", "#994499", "#22aa99", "#aaaa11", "#6633cc", "#e67300", "#8b0707", "#651067", "#329262", "#5574a6", "#3b3eac"];
+            return colors_g[n % colors_g.length];
+        }
+
+        // update function
+        socket.on('coordinate', function (obj) {
+            // remove previous point with same id
+            d3.selectAll('#name' + obj[0][2]).remove();
+
+            var points = g.selectAll("scatter-dots").data(obj);
+            points.enter().append("svg:circle")
+                .attr('id', function (d) { return 'name' + d[2]; })
+                .attr("cx", function (d, i) { return x(d[0]); })
+                .attr("cy", function (d) { return y(d[1]); })
+                .attr("r", 5)
+                .attr("fill", function (d, i) { return colors(d[2]); });
+        });
+    </script>
+</body>
+
+</html>

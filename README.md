@@ -21,3 +21,11 @@ These are the libraries included in our project
 * beacon library for React Native: [react-native-beacons-manager](https://github.com/MacKentoch/react-native-beacons-manager)
 * trilateration library for Node.js: [trilateration](https://www.npmjs.com/package/trilateration)
 * JavaScript library for the Web monitoring interface : [D3.js](https://d3js.org/)
+
+## React Native App Installing
+
+Before deploying the React Native App, install the project's dependencies in the "TrilaterationApp" folder with npm
+
+```
+npm install
+```

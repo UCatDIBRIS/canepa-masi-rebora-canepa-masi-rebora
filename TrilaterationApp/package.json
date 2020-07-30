@@ -9,7 +9,7 @@
   "dependencies": {
     "merge": ">=1.2.1",
     "react": "16.3.1",
-    "react-native": "0.55.4",
+    "react-native": "^0.63.2",
     "react-native-beacons-manager": "^1.0.7"
   },
   "devDependencies": {

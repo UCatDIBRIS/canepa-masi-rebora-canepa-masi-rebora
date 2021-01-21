@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "description": "a simple server for beacon trilateration",
     "dependencies": {
-        "socket.io": "^2.1.1",
+        "socket.io": "^2.4.0",
         "trilateration": "0.0.1"
     }
 }

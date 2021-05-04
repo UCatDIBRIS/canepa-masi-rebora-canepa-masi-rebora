@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "merge": ">=1.2.1",
+    "merge": ">=2.1.1",
     "react": "16.3.1",
     "react-native": "^0.63.2",
     "react-native-beacons-manager": "^1.0.7"
